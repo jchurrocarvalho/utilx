@@ -35,67 +35,72 @@ fi
 BASEPATH="$2"
 
 #
-acl_args=""
+acl_args1=""
 i=0
 
 for arg in "$@"; do
     if [ $i -ge 2 ]; then
-        if [ "$acl_args" != "" ]; then
-            acl_args+=","
+        if [ "$acl_args1" != "" ]; then
+            acl_args1+=","
         fi
         if [ "$arg" = "EMPTY" ] || [ "$arg" = "0" ]; then
             GROUPID=""
         else
             GROUPID="$arg"
         fi
-        acl_args+="g:$GROUPID:rwX"
+        acl_args1+="g:$GROUPID:rwX"
     fi
     i=$((i+1))
 done
 
-find -P "$BASEPATH" -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args" {} \;
+#find -P "$BASEPATH" -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args1" '{}' \;
 
 #
-acl_args=""
+acl_args2=""
 i=0
 
 for arg in "$@"; do
     if [ $i -ge 2 ]; then
-        if [ "$acl_args" != "" ]; then
-            acl_args+=","
+        if [ "$acl_args2" != "" ]; then
+            acl_args2+=","
         fi
         if [ "$arg" = "EMPTY" ] || [ "$arg" = "0" ]; then
             GROUPID=""
         else
             GROUPID="$arg"
         fi
-        acl_args+="g:$GROUPID:rX"
+        acl_args2+="g:$GROUPID:rX"
     fi
     i=$((i+1))
 done
 
-find -P "$BASEPATH" -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args" {} \;
+#find -P "$BASEPATH" -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args2" '{}' \;
 
 #
-acl_args=""
+acl_args3=""
 i=0
 
 for arg in "$@"; do
     if [ $i -ge 2 ]; then
-        if [ "$acl_args" != "" ]; then
-            acl_args+=","
+        if [ "$acl_args3" != "" ]; then
+            acl_args3+=","
         fi
         if [ "$arg" = "EMPTY" ] || [ "$arg" = "0" ]; then
             GROUPID=""
         else
             GROUPID="$arg"
         fi
-        acl_args+="g:$GROUPID:000"
+        acl_args3+="g:$GROUPID:000"
     fi
     i=$((i+1))
 done
 
-find -P "$BASEPATH" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args" {} \;
+#find -P "$BASEPATH" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args3" '{}' \;
+
+find -P "$BASEPATH" \
+    \( -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args1" '{}' \; \) , \
+    \( -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args2" '{}' \; \) , \
+    \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args3" '{}' \; \)
 
 exit 0
 

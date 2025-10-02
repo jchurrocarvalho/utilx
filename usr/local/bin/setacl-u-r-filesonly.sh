@@ -56,13 +56,17 @@ i=0
 
 for arg in "$@"; do
     if [ $i -ge 4 ]; then
-        echo ">> Path: $arg"
+        echo "=> Path: $arg"
 
         if [ "$XBIT" = "1" ]; then
-            find -P "$arg" -type f -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS"x {} \;
-            find -P "$arg" -type f ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" {} \;
+            #find -P "$arg" -type f -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS"x '{}' \;
+            #find -P "$arg" -type f ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \;
+
+            find -P "$arg" \
+                \( -type f -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS"x '{}' \; \) , \
+                \( -type f ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \; \)
         else
-            find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" {} \;
+            find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \;
         fi
     fi
     i=$((i+1))

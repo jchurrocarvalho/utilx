@@ -43,10 +43,14 @@ i=0
 
 for arg in "$@"; do
     if [ $i -ge 2 ]; then
-        echo ">> Path: $arg"
+        echo "=> Path: $arg"
 
-        find -P "$arg" -type d -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rwX {} \;
-        find -P "$arg" -type d -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rX {} \;
+        #find -P "$arg" -type d -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rwX '{}' \;
+        #find -P "$arg" -type d -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rX '{}' \;
+
+        find -P "$arg" \
+            \( -type d -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rwX '{}' \; \) , \
+            \( -type d -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -dm u:"$USERID":rX '{}' \; \)
     fi
     i=$((i+1))
 done

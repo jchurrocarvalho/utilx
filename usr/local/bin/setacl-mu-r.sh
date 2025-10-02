@@ -30,13 +30,20 @@ fi
 i=0
 
 for arg in "$@"; do
-    echo ">> Path: $arg"
+    echo "=> Path: $arg"
 
-    find -P "$arg" ! -type l -perm -u=rwx -exec setfacl -m m::rwx {} \;
-    find -P "$arg" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -m m::rx {} \;
-    find -P "$arg" -type f -perm -u=rw ! -perm /u=x -exec setfacl -m m::rw {} \;
-    find -P "$arg" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::r {} \;
-    find -P "$arg" -type d ! -perm /u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::000 {} \;
+    #find -P "$arg" ! -type l -perm -u=rwx -exec setfacl -m m::rwx '{}' \;
+    #find -P "$arg" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -m m::rx '{}' \;
+    #find -P "$arg" -type f -perm -u=rw ! -perm /u=x -exec setfacl -m m::rw '{}' \;
+    #find -P "$arg" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::r '{}' \;
+    #find -P "$arg" -type d ! -perm /u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::000 '{}' \;
+
+    find -P "$arg" \
+        \( ! -type l -perm -u=rwx -exec setfacl -m m::rwx '{}' \; \) , \
+        \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -m m::rx '{}' \; \) , \
+        \( -type f -perm -u=rw ! -perm /u=x -exec setfacl -m m::rw '{}' \; \) , \
+        \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::r '{}' \; \) , \
+        \( -type d ! -perm /u=r ! -perm /u=w ! -perm /u=x -exec setfacl -m m::000 '{}' \; \)
     i=$((i+1))
 done
 

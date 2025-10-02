@@ -30,7 +30,7 @@ CERTFILENAME="$1"-ss.crt
 CSRFILENAME="$2"
 
 if [ "$4" = "" ] || [ "$4" = "0" ]; then
-    VALIDITY="999"
+    VALIDITY="365"
 else
     VALIDITY="$4"
 fi

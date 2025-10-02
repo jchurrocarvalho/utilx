@@ -24,6 +24,6 @@ if [ "$2" = "" ]; then
     exit 1
 fi
 
-find "$2" -type d -exec chmod g+s {} \;
-find "$2" -exec chgrp $1 {} \;
+find "$2" -type d -exec chmod g+s '{}' \;
+find "$2" -exec chgrp "$1" '{}' \;
 

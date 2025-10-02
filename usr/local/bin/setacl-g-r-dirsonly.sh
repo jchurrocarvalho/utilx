@@ -45,9 +45,9 @@ i=0
 
 for arg in "$@"; do
     if [ $i -ge 3 ]; then
-        echo ">> Path: $arg"
+        echo "=> Path: $arg"
 
-        find -P "$arg" -type d -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" {} \;
+        find -P "$arg" -type d -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" '{}' \;
     fi
     i=$((i+1))
 done

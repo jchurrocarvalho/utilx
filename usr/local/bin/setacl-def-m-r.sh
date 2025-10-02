@@ -30,11 +30,16 @@ fi
 i=0
 
 for arg in "$@"; do
-    echo ">> Path: $arg"
+    echo "=> Path: $arg"
 
-    find -P "$arg" -type d -perm -g=rwx -exec setfacl -dm m::rwX {} \;
-    find -P "$arg" -type d -perm -g=rx ! -perm /g=w -exec setfacl -dm m::rX {} \;
-    find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -dm m::000 {} \;
+    #find -P "$arg" -type d -perm -g=rwx -exec setfacl -dm m::rwX '{}' \;
+    #find -P "$arg" -type d -perm -g=rx ! -perm /g=w -exec setfacl -dm m::rX '{}' \;
+    #find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -dm m::000 '{}' \;
+
+    find -P "$arg" \
+        \( -type d -perm -g=rwx -exec setfacl -dm m::rwX '{}' \; \) , \
+        \( -type d -perm -g=rx ! -perm /g=w -exec setfacl -dm m::rX '{}' \; \) , \
+        \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -dm m::000 '{}' \; \)
     i=$((i+1))
 done
 

@@ -24,5 +24,5 @@ if [ "$1" = "" ]; then
     exit 1
 fi
 
-find "$1" -type d -exec chmod g+s {} \;
+find "$1" -type d -exec chmod g+s '{}' \;
 

@@ -30,7 +30,7 @@ CERTFILENAME="$1"-self.crt
 KEYSIZE="$3"
 
 if [ "$2" = "0" ]; then
-    VALIDITY="999"
+    VALIDITY="365"
 else
     VALIDITY="$2"
 fi

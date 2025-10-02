@@ -56,13 +56,17 @@ i=0
 
 for arg in "$@"; do
     if [ $i -ge 4 ]; then
-        echo ">> Path: $arg"
+        echo "=> Path: $arg"
 
         if [ "$XBIT" = "1" ]; then
-            find -P "$arg" -type f -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS"x {} \;
-            find -P "$arg" -type f ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" {} \;
+            #find -P "$arg" -type f -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS"x '{}' \;
+            #find -P "$arg" -type f ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" '{}' \;
+
+            find -P "$arg" \
+                \( -type f -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS"x '{}' \; \) , \
+                \( -type f ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" '{}' \; \)
         else
-            find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" {} \;
+            find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" '{}' \;
         fi
     fi
     i=$((i+1))

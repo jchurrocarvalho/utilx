@@ -1,5 +1,0 @@
-#!/bin/bash
-
-ls -1 usr/local/bin | xargs -t -n1 -I{} cp -vaf /usr/local/bin/{} usr/local/bin
-ls -1 usr/local/sbin | xargs -t -n1 -I{} cp -vaf /usr/local/sbin/{} iusr/local/sbin
-

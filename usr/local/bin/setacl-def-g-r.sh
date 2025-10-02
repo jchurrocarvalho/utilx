@@ -43,11 +43,16 @@ i=0
 
 for arg in "$@"; do
     if [ $i -ge 2 ]; then
-        echo ">> Path: $arg"
+        echo "=> Path: $arg"
 
-        find -P "$arg" -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rwX {} \;
-        find -P "$arg" -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rX {} \;
-        find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":000 {} \;
+        #find -P "$arg" -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rwX '{}' \;
+        #find -P "$arg" -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rX '{}' \;
+        #find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":000 '{}' \;
+
+        find -P "$arg" \
+            \( -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rwX '{}' \; \) , \
+            \( -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":rX '{}' \; \) , \
+            \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm g:"$GROUPID":000 '{}' \; \)
     fi
     i=$((i+1))
 done
