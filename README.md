@@ -1,6 +1,7 @@
 # utilx
 
 Linux tools and scripts usefull to manage boxes and executing commands. Started to be a practise bash scripts. Scripts to agile day by day tasks for users.
+(Scripts submitted to SAST tools)
 
 # Files
 
@@ -83,15 +84,18 @@ Scripts filename format:
 - setacl-m*.sh. Set acl mask for several paths.
 
 The scripts also as an parameter to indicate if mask should be recalculated or not. In bulk mode, executing setfacl commands in a sequence, can be useful to speed up. Beside, in some situations, can be useful to set the mask based on user / owner permissions and not based in group mask which is the default behaviour for setfacl / acl in Linux.
-
-- setacl-remove-all.sh. Remove all acl definitions, including default acl, from path or paths.
-
-The following scripts execute setfacl for user (-u-) or group (-g-) applying only for directories or files.
+The goal is to apply same user permissions as the owner, and group permissions as owner group. The exception are:
 
 - setacl-u-r-dirsonly.sh
 - setacl-u-r-filesonly.sh
 - setacl-g-r-dirsonly.sh
 - setacl-g-r-filesonly.sh
+
+The above scripts execute setfacl for user (-u-) or group (-g-) applying only for directories or files giving as parameter the permissions to apply. For directories "setfacl -R ..." with X (uppercase x - executable definition for dirs) bit in the acl permissions parameter could be one way of doing the job, but depending what is pretended to do, could be risky such as applying write permissions on directories but not on files or vice-versa.
+
+- setacl-remove-all.sh. Remove all acl definitions, including default acl, from path or paths.
+
+Read recomendation: "https://documentation.suse.com/sles/15-SP7/html/SLES-all/cha-security-acls.html"
 
 ## Others
 
