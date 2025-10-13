@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 KEYFILENAME="$1"-self-rsa.key
@@ -31,7 +31,20 @@ KEYSIZE="$2"
 
 echo "Generating self-signed private key $KEYFILENAME"
 openssl genrsa -out "$KEYFILENAME" "$KEYSIZE"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Creating self-signed request $CSRFILENAME"
 openssl req -new -key "$KEYFILENAME" -out "$CSRFILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+retvalue=$?
+
+exit $retvalue
 

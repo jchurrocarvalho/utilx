@@ -15,5 +15,8 @@
 #
 
 #find -mindepth 1 -maxdepth 1 -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
-find -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
+find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
+retvalue=$?
+
+exit $retvalue
 

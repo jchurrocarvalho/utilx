@@ -22,7 +22,7 @@ usage()
 
 if [ "$5" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 DBNAME="$1"
@@ -32,4 +32,7 @@ PORT="$4"
 DUMPFILENAME="$5".gz
 
 pg_dump -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" -Fc "$DBNAME" --schema-only | gzip > "$DUMPFILENAME"
+retvalue=$?
+
+exit $retvalue
 

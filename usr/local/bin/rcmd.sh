@@ -22,10 +22,8 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
-
-hostname=$(eval 'hostname')
 
 user="$1"
 host_to_command="$2"
@@ -49,7 +47,8 @@ echo "Using command: $command"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo ""
 
-ssh $user@$host_to_command sh -c "\"$command\""
+ssh "$user@$host_to_command" sh -c "\"$command\""
+retvalue=$?
 
-exit 0
+exit $retvalue
 

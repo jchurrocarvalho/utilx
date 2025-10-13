@@ -22,8 +22,11 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
-rpm2cpio $1 | cpio -idmv
+rpm2cpio "$1" | cpio -idmv
+retvalue=$?
+
+exit $retvalue
 

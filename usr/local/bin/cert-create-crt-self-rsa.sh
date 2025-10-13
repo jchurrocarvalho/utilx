@@ -22,7 +22,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 KEYFILENAME="$1"-self-rsa.key
@@ -37,4 +37,7 @@ fi
 
 echo "Generating self-signed key and crt. $KEYFILENAME, $CERTFILENAME"
 openssl req -x509 -noenc -days "$VALIDITY" -newkey rsa:"$KEYSIZE" -keyout "$KEYFILENAME" -out "$CERTFILENAME"
+retvalue=$?
+
+exit $retvalue
 

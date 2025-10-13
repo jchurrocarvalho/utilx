@@ -22,9 +22,12 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # Convert from der format to pem format
 openssl x509 -inform der -in "$1" -out "$2"
+retvalue=$?
+
+exit $retvalue
 

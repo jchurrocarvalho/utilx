@@ -24,11 +24,14 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PRIVATE_KEY_FILENAME="$1"
 PUBLIC_KEY_FILENAME="$2"
 
 openssl rsa -in "$PRIVATE_KEY_FILENAME" -pubout -out "$PUBLIC_KEY_FILENAME"
+retvalue=$?
+
+exit $retvalue
 

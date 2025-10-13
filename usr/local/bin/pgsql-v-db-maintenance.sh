@@ -17,20 +17,28 @@
 usage()
 {
     echo "postgres database maintenance with all (reindex, analyze) (using supplied version)"
-    echo "Usage: pgsql-v-db-maintenance.sh <version (ex: 13, 14, 15, 16, etc ...)> <database name> <database username> <server> <port>"
+    echo "Usage: pgsql-v-db-maintenance.sh <version (ex: 13, 14, 15, 16, etc ...)> <database name> <server> <port>"
 }
 
-if [ "$5" = "" ]; then
+if [ "$4" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PGSQLVERSION="$1"
 DBNAME="$2"
-DBUSERNAME="$3"
-SERVERNAME="$4"
-PORT="$5"
+SERVERNAME="$3"
+PORT="$4"
 
-sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c "reindex database $DBNAME;"
-sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c 'analyze;'
+sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c "reindex database $DBNAME;"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
+sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c 'analyze;'
+retvalue=$?
+
+exit $retvalue
 

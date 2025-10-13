@@ -34,7 +34,7 @@ fi
 
 if [ "$CACERTFILENAME" = "" ] || [ "$CERTFILENAME" = "" ] || [ "$KEYFILENAME" = "" ] || [ "$PFXFILENAME" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 #
@@ -44,3 +44,7 @@ if [ "$ALIAS" = "" ]; then
 else
     openssl pkcs12 -export -out "$PFXFILENAME" -inkey "$KEYFILENAME" -in "$CACERTFILENAME" -in "$CERTFILENAME" -name "$ALIAS"
 fi
+retvalue=$?
+
+exit $retvalue
+

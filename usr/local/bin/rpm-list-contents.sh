@@ -22,8 +22,11 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
-rpm -qlp $1
+rpm -qlp "$1"
+retvalue=$?
+
+exit $retvalue
 

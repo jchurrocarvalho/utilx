@@ -49,7 +49,7 @@ fi
 
 if [ "$ALIAS" = "" ] || [ "$KEYSTOREPATH" = "" ] || [ "$KEYSTOREFILENAME" = "" ] || [ "$VALIDITY" = "" ] || [ "$KEYSIZE" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 mkdir -p "$KEYSTOREPATH"
@@ -59,4 +59,7 @@ if [ "$DNAME" = "" ]; then
 else
     keytool -genkey -alias "$ALIAS" -keyalg RSA -keystore "$KEYSTOREPATHFILENAME" -validity "$VALIDITY" -keysize "$KEYSIZE" -storetype "$STORETYPE" -dname "$DNAME"
 fi
+retvalue=$?
+
+exit $retvalue
 

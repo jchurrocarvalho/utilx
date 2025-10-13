@@ -22,7 +22,7 @@ usage()
 
 if [ "$6" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PGSQLVERSION="$1"
@@ -32,5 +32,8 @@ SERVERNAME="$4"
 PORT="$5"
 DUMPFILENAME="$6".gz
 
-/usr/pgsql-$PGSQLVERSION/bin/pg_dump -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" -Fc "$DBNAME" | gzip > "$DUMPFILENAME"
+/usr/pgsql-"$PGSQLVERSION"/bin/pg_dump -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" -Fc "$DBNAME" | gzip > "$DUMPFILENAME"
+retvalue=$?
+
+exit $retvalue
 

@@ -23,7 +23,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 if [ "$1" = "1" ]; then
@@ -145,6 +145,7 @@ find -P "$BASEPATH" \
     \( -type f -perm -g=rw ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args3" '{}' \; \) , \
     \( -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args4" '{}' \; \) , \
     \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args5" '{}' \; \)
+retvalue=$?
 
-exit 0
+exit $retvalue
 

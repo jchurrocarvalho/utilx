@@ -21,9 +21,12 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 find "$2" -type d -exec chmod g+s '{}' \;
 find "$2" -exec chgrp "$1" '{}' \;
+retvalue=$?
+
+exit $retvalue
 

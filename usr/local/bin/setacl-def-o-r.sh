@@ -22,7 +22,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 if [ "$1" = "1" ]; then
@@ -34,6 +34,7 @@ fi
 #
 
 i=0
+retvalue=0
 
 for arg in "$@"; do
     if [ $i -ge 1 ]; then
@@ -47,9 +48,14 @@ for arg in "$@"; do
             \( -type d -perm -o=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm o::rwX '{}' \; \) , \
             \( -type d -perm -o=rx ! -perm /o=w -exec setfacl "$RECALCULATEMASKOPTION" -dm o::rX '{}' \; \) , \
             \( -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl "$RECALCULATEMASKOPTION" -dm o::000 '{}' \; \)
+        retvalue=$?
+        if [ "$retvalue" != "0" ]; then
+            echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+            break
+        fi
     fi
     i=$((i+1))
 done
 
-exit 0
+exit $retvalue
 

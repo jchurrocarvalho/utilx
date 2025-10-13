@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # redirect stdin and stderr for PATHFILETITLE.txt
@@ -33,8 +33,10 @@ workdir=$(eval 'pwd')
 
 echo "-> git pull in $1"
 
-cd "$1"
+cd "$1" || exit 1
 git pull
 
-cd "$workdir"
+cd "$workdir" || exit 1
+
+exit 0
 

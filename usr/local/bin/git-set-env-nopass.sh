@@ -16,3 +16,5 @@
 
 export GIT_ASKPASS=echo
 
+exit 0
+

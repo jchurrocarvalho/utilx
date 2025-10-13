@@ -23,7 +23,7 @@ usage()
 
 if [ "$5" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 if [ "$1" = "1" ]; then
@@ -53,6 +53,7 @@ fi
 PERMS="$3"
 
 i=0
+retvalue=0
 
 for arg in "$@"; do
     if [ $i -ge 4 ]; then
@@ -68,9 +69,14 @@ for arg in "$@"; do
         else
             find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \;
         fi
+        retvalue=$?
+        if [ "$retvalue" != "0" ]; then
+            echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+            break
+        fi
     fi
     i=$((i+1))
 done
 
-exit 0
+exit $retvalue
 

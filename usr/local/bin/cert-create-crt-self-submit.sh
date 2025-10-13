@@ -22,7 +22,7 @@ usage()
 
 if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 KEYFILENAME="$3"
@@ -37,4 +37,7 @@ fi
 
 echo "Submiting self-signed request $CSRFILENAME"
 openssl x509 -req -days "$VALIDITY" -in "$CSRFILENAME" -signkey "$KEYFILENAME" -out "$CERTFILENAME"
+retvalue=$?
+
+exit $retvalue
 

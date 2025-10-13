@@ -55,7 +55,7 @@ TMPPFXFILENAME="/tmp/$DTIMENOW.pfx.tmp"
 #if [ "$KEYSTOREPATH" = "" ] || [ "$CERTFILENAME" = "" ] || [ "$KEYFILENAME" = "" ] || [ "$DESTKEYPASS" = "" ]; then
 if [ "$KEYSTOREPATH" = "" ] || [ "$CERTFILENAME" = "" ] || [ "$KEYFILENAME" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 rm -i "$KEYSTOREPATHFILENAME"
@@ -65,11 +65,29 @@ if [ "$DNAME" = "" ]; then
 else
     cert-java-keystore-create-rsa.sh root "$KEYSTOREPATH" "$KEYSTOREFILENAME" 3650 "$KEYSIZE" pkcs12 "$DNAME"
 fi
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 cert-create-pfx-from-crt-key.sh "$CERTFILENAME" "$KEYFILENAME" "$TMPPFXFILENAME" "$ALIAS"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 #cert-java-keystore-import-pfx.sh "$KEYSTOREPATHFILENAME" pkcs12 "$TMPPFXFILENAME" "$DESTKEYPASS" "$ALIAS" "$ALIAS"
 cert-java-keystore-import-pfx2.sh "$KEYSTOREPATHFILENAME" pkcs12 "$TMPPFXFILENAME" "$ALIAS" "$ALIAS"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 rm -f "$TMPPFXFILENAME"
+retvalue=$?
+
+exit $retvalue
 

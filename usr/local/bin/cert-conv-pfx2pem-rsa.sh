@@ -25,24 +25,57 @@ usage()
 
 if [ "$7" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 echo "Exporting no encrypted private key to $2"
 openssl pkcs12 -in "$1" -nocerts -out "$2" -noenc
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Exporting client certificate to $3"
 openssl pkcs12 -in "$1" -clcerts -nokeys -out "$3"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Exporting certificates to $4"
 openssl pkcs12 -in "$1" -nokeys -out "$4"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Exporting ca certificates to $5"
 openssl pkcs12 -in "$1" -cacerts -nokeys -out "$5"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Exporting rsa key filename without passphrase to $6"
 openssl rsa -in "$2" -out "$6"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 echo "Exporting encrypted private key and all certs to $7"
 openssl pkcs12 -in "$1" -out "$7"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+retvalue=$?
+
+exit $retvalue
 

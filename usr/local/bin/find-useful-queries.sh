@@ -23,7 +23,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # git in .git directory internal structure objects directory (.git/objects) make files with only r perms

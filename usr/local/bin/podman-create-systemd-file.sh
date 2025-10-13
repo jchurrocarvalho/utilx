@@ -22,8 +22,11 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 podman generate systemd --name --container-prefix=podman-container --pod-prefix=podman-pod --files "$1"
+retvalue=$?
+
+exit $retvalue
 

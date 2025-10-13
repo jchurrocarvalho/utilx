@@ -28,8 +28,11 @@ CERTREQFILENAME="$4"
 
 if [ "$ALIAS" = "" ] || [ "$KEYSTOREPATHFILENAME" = "" ] || [ "$STORETYPE" = "" ] || [ "$CERTREQFILENAME" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 keytool -certreq -alias "$ALIAS" -keystore "$KEYSTOREPATHFILENAME" -storetype "$STORETYPE" -file "$CERTREQFILENAME"
+retvalue=$?
+
+exit $retvalue
 

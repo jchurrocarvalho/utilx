@@ -17,6 +17,7 @@
 # Query for the current active connections to the Apache server
 echo "Querying for current active connections to the Apache server on ports 80 and 443 ..."
 active_connections=$(netstat -an | grep ':80\|:443' | grep ESTABLISHED)
+retvalue=$?
 
 # Check if there are any active connections
 if [ -n "$active_connections" ]; then
@@ -25,4 +26,6 @@ if [ -n "$active_connections" ]; then
 else
     echo "No active connections found."
 fi
+
+exit $retvalue
 

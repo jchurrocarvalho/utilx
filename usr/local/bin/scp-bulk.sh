@@ -22,11 +22,12 @@ usage()
 
 if [ "$4" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 hostname=$(eval 'hostname')
 
+user="$1"
 targethostname=""
 port=""
 
@@ -45,8 +46,13 @@ for arg in "$@"; do
 done
 
 i=0
+retvalueend=0
 
-for line in $(cat "$2"); do
+INPUTFILENAME="$2"
+
+#for line in $(cat "$INPUTFILENAME"); do
+while IFS= read -r line
+do
     if [ -n "$line" ]; then
         if [[ "${line:0:1}" != "#" ]]; then
             if [ "${line:0:1}" = "P" ]; then
@@ -66,13 +72,18 @@ for line in $(cat "$2"); do
                 echo "================================================================"
                 echo "host: $targethostname:$port"
                 echo "================================================================"
-                #scp "$4" "$1@$targethostname:$3"
-                #scp -r "$files_args" "$1@$targethostname:$3"
+                #scp "$4" "$user@$targethostname:$3"
+                #scp -r "$files_args" "$user@$targethostname:$3"
                 i=0
                 for arg in "$@"
                 do
                     if [ $i -ge 3 ]; then
-                        scp -P "$port" "$arg" "$1@$targethostname:$3"
+                        scp -P "$port" "$arg" "$user@$targethostname:$3"
+                        retvalue=$?
+                        if [ "$retvalue" != "0" ]; then
+                            echo "An error was returned. {User: $user, Host: $targethostname, Port: $port}, {Line: $LINENO, Error Code: $retvalue}"
+                            retvalueend=$retvalue
+                        fi
                     fi
                     i=$((i+1))
                 done
@@ -80,7 +91,7 @@ for line in $(cat "$2"); do
             fi
         fi
     fi
-done
+done < "$INPUTFILENAME"
 
-exit 0
+exit $retvalueend
 

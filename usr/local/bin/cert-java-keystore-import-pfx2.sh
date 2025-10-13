@@ -30,7 +30,7 @@ SRCALIAS="$5"
 
 if [ "$KEYSTOREFILENAME" = "" ] || [ "$STORETYPE" = "" ] || [ "$PFXFILENAME" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 #
@@ -42,4 +42,7 @@ elif [ "$SRCALIAS" = "" ]; then
 else
     keytool -importkeystore -srckeystore "$PFXFILENAME" -srcstoretype pkcs12 -destkeystore "$KEYSTOREFILENAME" -deststoretype "$STORETYPE" -destalias "$DESTALIAS" -srcalias "$SRCALIAS"
 fi
+retvalue=$?
+
+exit $retvalue
 

@@ -22,17 +22,22 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 hostname=$(eval 'hostname')
 
+user="$1"
 targethostname=""
 port=""
 
 i=0
 
-for line in $(cat "$2"); do
+INPUTFILENAME="$2"
+
+#for line in $(cat "$INPUTFILENAME"); do
+while IFS= read -r line
+do
     if [ -n "$line" ]; then
         if [[ "${line:0:1}" != "#" ]]; then
             if [ "${line:0:1}" = "P" ]; then
@@ -52,12 +57,12 @@ for line in $(cat "$2"); do
                 echo "================================================================"
                 echo "host: $targethostname:$port"
                 echo "================================================================"
-                ssh-copy-id -p $port -i ~/.ssh/id_rsa.pub "$1@$targethostname"
+                ssh-copy-id -p "$port" -i ~/.ssh/id_rsa.pub "$user@$targethostname"
                 echo ""
             fi
         fi
     fi
-done
+done < "$INPUTFILENAME"
 
 exit 0
 

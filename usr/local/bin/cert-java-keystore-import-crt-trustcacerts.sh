@@ -28,8 +28,11 @@ CERTFILENAME="$4"
 
 if [ "$ALIAS" = "" ] || [ "$KEYSTOREFILENAME" = "" ] || [ "$STORETYPE" = "" ] || [ "$CERTFILENAME" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 keytool -importcert -trustcacerts -alias "$ALIAS" -keystore "$KEYSTOREFILENAME" -storetype "$STORETYPE" -file "$CERTFILENAME"
+retvalue=$?
+
+exit $retvalue
 

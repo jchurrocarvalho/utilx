@@ -22,7 +22,7 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 #"$@" >/dev/null 2>/dev/null &
@@ -47,5 +47,7 @@ echo ""
 #$command &
 $command >/dev/null 2>/dev/null &
 
-exit 0
+retvalue=$?
+
+exit $retvalue
 

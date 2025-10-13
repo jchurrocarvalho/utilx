@@ -22,7 +22,7 @@ usage()
 
 if [ "$7" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PGSQLVERSION="$1"
@@ -37,18 +37,42 @@ DBUSERPASSWORD="$8"
 if [ "$CREATEROLE" = "1" ]; then
     if [ "$DBUSERPASSWORD" = "" ]; then
         usage
-        exit 1
+        exit 2
     fi
 fi
 
-sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "drop database if exists $DBNAME;"
-
-if [ "$CREATEROLE" = "1" ]; then
-    sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "create role $DBUSERNAME LOGIN password '$DBUSERPASSWORD';";
+sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "drop database if exists $DBNAME;"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
 fi
 
-sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "create database $DBNAME with template 'template0' encoding 'UTF8';"
-sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "grant all on database $DBNAME to $DBUSERNAME;"
+if [ "$CREATEROLE" = "1" ]; then
+    sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "create role $DBUSERNAME LOGIN password '$DBUSERPASSWORD';";
+    retvalue=$?
+    if [ "$retvalue" != "0" ]; then
+        echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+        exit $retvalue
+    fi
+fi
 
-gunzip -c "$DUMPFILENAME" | /usr/pgsql-$PGSQLVERSION/bin/pg_restore -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" --clean --no-privileges --no-owner -d "$DBNAME"
+sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "create database $DBNAME with template 'template0' encoding 'UTF8';"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
+sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -h "$SERVERNAME" -p "$PORT" -c "grant all on database $DBNAME to $DBUSERNAME;"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
+
+gunzip -c "$DUMPFILENAME" | /usr/pgsql-"$PGSQLVERSION"/bin/pg_restore -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" --clean --no-privileges --no-owner -d "$DBNAME"
+retvalue=$?
+
+exit $retvalue
 

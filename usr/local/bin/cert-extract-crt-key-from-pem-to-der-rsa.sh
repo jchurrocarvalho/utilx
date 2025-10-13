@@ -24,7 +24,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # Export the private key
@@ -32,4 +32,7 @@ openssl rsa -in "$1" -outform der -out "$2"-key.der
 
 # Export the certificate
 openssl x509 -in "$1" -outform der -out "$2"-crt.der
+retvalue=$?
+
+exit $retvalue
 

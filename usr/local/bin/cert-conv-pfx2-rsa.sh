@@ -24,7 +24,7 @@ usage()
 
 if [ "$2" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PKEY_ENC_PEM_FILENAME="$2"-pkey.pem
@@ -45,61 +45,139 @@ CERT_RSA_KEY_PEM_FILENAME="$2"-rsa-pkey.pem
 
 echo "Exporting only encrypted private key to $PKEY_ENC_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -nocerts -out "$PKEY_ENC_PEM_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$PKEY_ENC_PEM_FILENAME"
 
 echo "Exporting only encrypted private key to $PKEY_ENC_KEY_FILENAME in pem format"
 openssl pkcs12 -in "$1" -nocerts -out "$PKEY_ENC_KEY_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$PKEY_ENC_KEY_FILENAME"
 
 echo "Exporting rsa key to $CERT_RSA_KEY_PEM_FILENAME in pem format"
 openssl rsa -in "$PKEY_ENC_KEY_FILENAME" -out "$CERT_RSA_KEY_PEM_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_RSA_KEY_PEM_FILENAME"
 
 echo "Exporting no encrypted private key to $PKEY_NOE_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -nocerts -out "$PKEY_NOE_PEM_FILENAME" -noenc
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$PKEY_NOE_PEM_FILENAME"
 
 echo "Exporting rsa key filename without passphrase to $PKEY_RSA_KEY_FILENAME"
 openssl rsa -in "$PKEY_NOE_PEM_FILENAME" -out "$PKEY_RSA_KEY_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$PKEY_RSA_KEY_FILENAME"
 
 echo "Exporting client certificate $CERT_CLIENT_CERT_FILENAME"
 openssl pkcs12 -in "$1" -clcerts -nokeys -out "$CERT_CLIENT_CERT_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_CLIENT_CERT_FILENAME"
 
 echo "Exporting all certificates $CERT_ALL_CERTS_FILENAME"
 openssl pkcs12 -in "$1" -nokeys -out "$CERT_ALL_CERTS_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_ALL_CERTS_FILENAME"
 
 echo "Exporting CA certificates $CERT_CACERTS_FILENAME"
 openssl pkcs12 -in "$1" -cacerts -nokeys -out "$CERT_CACERTS_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_CACERTS_FILENAME"
 
 echo "Exporting CA certificates with chain $CERT_CACERTS_CHAIN_FILENAME"
 openssl pkcs12 -in "$1" -cacerts -nokeys -out "$CERT_CACERTS_CHAIN_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_CACERTS_CHAIN_FILENAME"
 
 echo "Exporting CA certificates with chain without bag attributes $CERT_CACERTS_CHAIN_WITHOUTBAGATTRIBUTES_FILENAME"
 openssl pkcs12 -in "$1" -cacerts -nokeys | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > "$CERT_CACERTS_CHAIN_WITHOUTBAGATTRIBUTES_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_CACERTS_CHAIN_WITHOUTBAGATTRIBUTES_FILENAME"
 
 echo "Exporting encrypted private key and cert combined to $CERT_ENC_PKEY_CERT_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -out "$CERT_ENC_PKEY_CERT_PEM_FILENAME" -clcerts
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_ENC_PKEY_CERT_PEM_FILENAME"
 
 echo "Exporting no encrypted private key and cert combined to $CERT_NOE_PKEY_CERT_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -out "$CERT_NOE_PKEY_CERT_PEM_FILENAME" -clcerts -noenc
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_NOE_PKEY_CERT_PEM_FILENAME"
 
 echo "Exporting encrypted private key and all certs combined to $CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -out "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME"
 
 echo "Exporting no encrypted private key and all certs combined to $CERT_NOE_PKEY_ALL_CERTS_PEM_FILENAME in pem format"
 openssl pkcs12 -in "$1" -out "$CERT_NOE_PKEY_ALL_CERTS_PEM_FILENAME" -noenc
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_NOE_PKEY_ALL_CERTS_PEM_FILENAME"
 
 echo "Exporting pem with encrypted key and all certs to der to use for example to import to java keystore, $CERT_ENC_PKEY_ALL_CERTS_DER_FILENAME"
 openssl x509 -in "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME" -outform DER -out "$CERT_ENC_PKEY_ALL_CERTS_DER_FILENAME"
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 chmod go-rwx "$CERT_ENC_PKEY_ALL_CERTS_DER_FILENAME"
+retvalue=$?
+
+exit $retvalue
 

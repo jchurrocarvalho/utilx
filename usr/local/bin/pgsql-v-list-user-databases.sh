@@ -17,22 +17,29 @@
 usage()
 {
     echo "postgres list user databases (using supplied version)"
-    echo "Usage: pgsql-v-list-user-databases.sh <version (ex: 13, 14, 15, 16, etc ...)> <database username> <server> <port>"
+    echo "Usage: pgsql-v-list-user-databases.sh <version (ex: 13, 14, 15, 16, etc ...)> <server> <port>"
 }
 
-if [ "$4" = "" ]; then
+if [ "$3" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 PGSQLVERSION="$1"
-DBUSERNAME="$2"
-SERVERNAME="$3"
-PORT="$4"
+SERVERNAME="$2"
+PORT="$3"
 
-dbnames=$(sudo -u postgres /usr/pgsql-$PGSQLVERSION/bin/psql postgres -t -h "$SERVERNAME" -p "$PORT" -c "select datname from pg_database where datistemplate = false and datname <> 'postgres';")
+dbnames=$(sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -t -h "$SERVERNAME" -p "$PORT" -c "select datname from pg_database where datistemplate = false and datname <> 'postgres';")
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 for dbname in $dbnames; do
     echo "Using $dbname"
     echo "$dbname"
 done
+
+exit 0
+

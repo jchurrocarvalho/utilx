@@ -22,21 +22,30 @@ usage()
 
 if [ "$1" = "" ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 workdir=$(eval 'pwd')
 
 mkdir -p "$1"
-cd "$1"
+cd "$1" || exit 1
 certutil -N -d .
+retvalue=$?
+if [ "$retvalue" != "0" ]; then
+    echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
+    exit $retvalue
+fi
 
 #echo $PIN >> pfile.txt
 #chmod o-rwx pfile.txt
 
-chown :apache *.db && chmod g+rw *.db
+chown :apache ./*.db && chmod g+rw ./*.db
 semanage fcontext -a -t cert_t "$1(/.*)?"
 restorecon -FvvR "$1/"
 
-cd "$workdir"
+cd "$workdir" || exist 1
+
+retvalue=$?
+
+exit $retvalue
 

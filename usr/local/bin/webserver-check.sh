@@ -20,7 +20,7 @@ cat /etc/os-release
 
 # Find directories related to Apache or httpd
 echo "# Apache/HTTPD Directories"
-find /etc -type d -name 'httpd' -o -name 'apache2'
+find /etc -type d \( -name 'httpd' -o -name 'apache2' \)
 
 # List running httpd processes
 echo "# Running httpd processes"
@@ -65,4 +65,8 @@ ps aux | grep -E '[t]omcat|[j]etty|[p]ython3?-m http.server'
 # List all network services listening on ports typically used by web servers
 echo "# Network Services listening on common web server ports"
 ss -tuln | grep -E ':80|:443|:8080|:8443'
+
+retvalue=$?
+
+exit $retvalue
 
