@@ -17,7 +17,7 @@
 usage()
 {
     echo "git pull with path"
-    echo "Usage: git-pull-p.sh <path>"
+    echo "Usage: git-pull-p.sh <path> <git pull options (optional)>"
 }
 
 if [ "$1" = "" ]; then
@@ -29,12 +29,33 @@ fi
 #exec 1>&1
 #exec 2>&1
 
+GIT_REPO_PATH="$1"
+
+#
+
+git_pull_options=""
+i=0
+
+for arg in "$@"; do
+    if [ $i -ge 1 ]; then
+        if [ "$git_pull_options" != "" ]; then
+            git_pull_options+=" "
+        fi
+        git_pull_options+="$arg"
+    fi
+    i=$((i+1))
+done
+
 workdir=$(eval 'pwd')
 
-echo "-> git pull in $1"
+echo "-> git pull in $GIT_REPO_PATH with options = [$git_pull_options]"
 
-cd "$1" || exit 1
-git pull
+cd "$GIT_REPO_PATH" || exit 1
+if [ "$git_pull_options" != "" ]; then
+    git pull $git_pull_options
+else
+    git pull
+fi
 
 cd "$workdir" || exit 1
 

@@ -17,7 +17,7 @@
 usage()
 {
     echo "rpm-list-contents"
-    echo "Usage: rpm-list-contents <filename>"
+    echo "Usage: rpm-list-contents.sh <filename>"
 }
 
 if [ "$1" = "" ]; then
@@ -28,5 +28,5 @@ fi
 rpm -qlp "$1"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

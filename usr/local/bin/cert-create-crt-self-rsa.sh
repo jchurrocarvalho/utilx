@@ -39,5 +39,5 @@ echo "Generating self-signed key and crt. $KEYFILENAME, $CERTFILENAME"
 openssl req -x509 -noenc -days "$VALIDITY" -newkey rsa:"$KEYSIZE" -keyout "$KEYFILENAME" -out "$CERTFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

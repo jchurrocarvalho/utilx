@@ -28,5 +28,5 @@ fi
 openssl dhparam -out "$1" "$2"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

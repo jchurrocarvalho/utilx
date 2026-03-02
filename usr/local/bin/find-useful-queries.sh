@@ -14,58 +14,72 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+SCRIPTTITLE="find-useful-queries"
+
 usage()
 {
     echo "several find useful queries"
     echo "Queries like strange perms such as group write but user without write perm ... and so on ..."
-    echo "Usage: find-useful-queries.sh <path> ..."
+    echo "Usage: $SCRIPTTITLE.sh <include read bit in others perms? (0/1)> <path> ..."
 }
 
-if [ "$1" = "" ]; then
+if [ "$2" = "" ]; then
     usage
     exit 2
 fi
 
 # git in .git directory internal structure objects directory (.git/objects) make files with only r perms
 
+if [ "$1" = "1" ]; then
+    INCLUDEREADOTHERS="1"
+else
+    INCLUDEREADOTHERS="0"
+fi
+
 i=0
 
 for arg in "$@"; do
-    echo ">> Path: $arg"
+    if [ $i -ge 1 ]; then
+        echo ">> Path: $arg"
 
-    echo ">>>> Find files in .git dir with g w and ! u w ..."
-    find -P "$arg" -type f -ipath "*/.git/*" -perm /g=w ! -perm /u=w -print
+        echo ">>>> Find files in .git dir with g w and ! u w ..."
+        find -P "$arg" -type f -ipath "*/.git/*" -perm /g=w ! -perm /u=w -print
 
-    echo ">>>> Find files in .git dir with g x and ! u x ..."
-    find -P "$arg" -type f -ipath "*/.git/*" -perm /g=x ! -perm /u=x -print
+        echo ">>>> Find files in .git dir with g x and ! u x ..."
+        find -P "$arg" -type f -ipath "*/.git/*" -perm /g=x ! -perm /u=x -print
 
-    echo ">>>> Find files in .svn dir with g w and ! u w ..."
-    find -P "$arg" -type f -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
+        echo ">>>> Find files in .svn dir with g w and ! u w ..."
+        find -P "$arg" -type f -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
 
-    echo ">>>> Find files in .svn dir with g x and ! u x ..."
-    find -P "$arg" -type f -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
+        echo ">>>> Find files in .svn dir with g x and ! u x ..."
+        find -P "$arg" -type f -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
 
-    echo ">>>> Find files excluding .git and .svn dir with g x and ! u x ..."
-    find -P "$arg" -type f ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
+        echo ">>>> Find files excluding .git and .svn dir with g x and ! u x ..."
+        find -P "$arg" -type f ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
 
-    echo ">>>> Find dirs excluding .git and .svn dir with g x and ! u x ..."
-    find -P "$arg" -type d ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
+        echo ">>>> Find dirs excluding .git and .svn dir with g x and ! u x ..."
+        find -P "$arg" -type d ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=x ! -perm /u=x -print
 
-    echo ">>>> Find files excluding .git and .svn dir with g w and ! u w ..."
-    find -P "$arg" -type f ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
+        echo ">>>> Find files excluding .git and .svn dir with g w and ! u w ..."
+        find -P "$arg" -type f ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
 
-    echo ">>>> Find dirs excluding .git and .svn dir with g w and ! u w ..."
-    find -P "$arg" -type d ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
+        echo ">>>> Find dirs excluding .git and .svn dir with g w and ! u w ..."
+        find -P "$arg" -type d ! -ipath "*/.git/*" ! -ipath "*/.svn/*" -perm /g=w ! -perm /u=w -print
 
-    echo ">>>> Find dirs with g w and ! u w ..."
-    find -P "$arg" -type d -perm /g=w ! -perm /u=w -print
+        echo ">>>> Find dirs with g w and ! u w ..."
+        find -P "$arg" -type d -perm /g=w ! -perm /u=w -print
 
-    echo ">>>> Find files or dirs with group s bit set ..."
-    find -P "$arg" -perm /g=s -print
+        echo ">>>> Find files or dirs with group s bit set ..."
+        find -P "$arg" -perm /g=s -print
 
-    echo ">>>> Find any excluding symlinks with any bit set in others! ..."
-    find -P "$arg" ! -type l -perm /o=rwx -print
-
+        if [ "$INCLUDEREADOTHERS" = "1" ]; then
+            echo ">>>> Find any excluding symlinks with any bit set in others! ..."
+            find -P "$arg" ! -type l -perm /o=rwx -print
+        else
+            echo ">>>> Find any excluding symlinks with w or x bit set in others! ..."
+            find -P "$arg" ! -type l -perm /o=wx -print
+        fi
+    fi
     i=$((i+1))
 done
 

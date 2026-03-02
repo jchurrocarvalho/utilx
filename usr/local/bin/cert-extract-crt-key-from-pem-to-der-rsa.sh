@@ -34,5 +34,5 @@ openssl rsa -in "$1" -outform der -out "$2"-key.der
 openssl x509 -in "$1" -outform der -out "$2"-crt.der
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

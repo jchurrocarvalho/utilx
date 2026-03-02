@@ -14,19 +14,8 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-#usage()
-#{
-#    echo "git show remote branches"
-#    echo "Usage: git-show-remote-branches.sh"
-#}
-
-#if [ "$1" = "" ]; then
-#    usage
-#    exit 2
-#fi
-
 git remote show origin
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

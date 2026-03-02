@@ -28,5 +28,5 @@ fi
 podman generate systemd --name --container-prefix=podman-container --pod-prefix=podman-pod "$1"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

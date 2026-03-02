@@ -33,5 +33,5 @@ PORT="$4"
 sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c 'analyze;'
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

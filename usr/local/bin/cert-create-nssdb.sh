@@ -33,7 +33,7 @@ certutil -N -d .
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 #echo $PIN >> pfile.txt
@@ -47,5 +47,5 @@ cd "$workdir" || exist 1
 
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

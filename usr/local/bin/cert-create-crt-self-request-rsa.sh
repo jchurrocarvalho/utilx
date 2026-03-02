@@ -34,7 +34,7 @@ openssl genrsa -out "$KEYFILENAME" "$KEYSIZE"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 echo "Creating self-signed request $CSRFILENAME"
@@ -42,9 +42,9 @@ openssl req -new -key "$KEYFILENAME" -out "$CSRFILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

@@ -51,5 +51,5 @@ else
 fi
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

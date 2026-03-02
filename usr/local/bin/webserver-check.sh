@@ -68,5 +68,5 @@ ss -tuln | grep -E ':80|:443|:8080|:8443'
 
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

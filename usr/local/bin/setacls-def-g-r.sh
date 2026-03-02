@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 BASEPATH="$2"
@@ -53,7 +53,7 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args1" '{}' \;
+#find -P "$BASEPATH" -type d -perm -g=rwx -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args1" '{}' \;
 
 #
 acl_args2=""
@@ -74,7 +74,7 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args2" '{}' \;
+#find -P "$BASEPATH" -type d -perm -g=rx ! -perm /g=w -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args2" '{}' \;
 
 #
 acl_args3=""
@@ -95,13 +95,13 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args3" '{}' \;
+#find -P "$BASEPATH" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args3" '{}' \;
 
 find -P "$BASEPATH" \
-    \( -type d -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args1" '{}' \; \) , \
-    \( -type d -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args2" '{}' \; \) , \
-    \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -dm "$acl_args3" '{}' \; \)
+    \( -type d -perm -g=rwx -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args1" '{}' \; \) , \
+    \( -type d -perm -g=rx ! -perm /g=w -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args2" '{}' \; \) , \
+    \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"dm "$acl_args3" '{}' \; \)
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

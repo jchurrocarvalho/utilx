@@ -53,5 +53,5 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-exit $retvalue
+exit "$retvalue"
 

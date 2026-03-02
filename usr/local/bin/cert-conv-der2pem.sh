@@ -29,5 +29,5 @@ fi
 openssl x509 -inform der -in "$1" -out "$2"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

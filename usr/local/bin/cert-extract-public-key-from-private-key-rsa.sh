@@ -33,5 +33,5 @@ PUBLIC_KEY_FILENAME="$2"
 openssl rsa -in "$PRIVATE_KEY_FILENAME" -pubout -out "$PUBLIC_KEY_FILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

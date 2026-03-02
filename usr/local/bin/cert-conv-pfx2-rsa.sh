@@ -48,7 +48,7 @@ openssl pkcs12 -in "$1" -nocerts -out "$PKEY_ENC_PEM_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$PKEY_ENC_PEM_FILENAME"
 
@@ -57,7 +57,7 @@ openssl pkcs12 -in "$1" -nocerts -out "$PKEY_ENC_KEY_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$PKEY_ENC_KEY_FILENAME"
 
@@ -66,7 +66,7 @@ openssl rsa -in "$PKEY_ENC_KEY_FILENAME" -out "$CERT_RSA_KEY_PEM_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_RSA_KEY_PEM_FILENAME"
 
@@ -75,7 +75,7 @@ openssl pkcs12 -in "$1" -nocerts -out "$PKEY_NOE_PEM_FILENAME" -noenc
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$PKEY_NOE_PEM_FILENAME"
 
@@ -84,7 +84,7 @@ openssl rsa -in "$PKEY_NOE_PEM_FILENAME" -out "$PKEY_RSA_KEY_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$PKEY_RSA_KEY_FILENAME"
 
@@ -93,7 +93,7 @@ openssl pkcs12 -in "$1" -clcerts -nokeys -out "$CERT_CLIENT_CERT_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_CLIENT_CERT_FILENAME"
 
@@ -102,7 +102,7 @@ openssl pkcs12 -in "$1" -nokeys -out "$CERT_ALL_CERTS_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_ALL_CERTS_FILENAME"
 
@@ -111,7 +111,7 @@ openssl pkcs12 -in "$1" -cacerts -nokeys -out "$CERT_CACERTS_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_CACERTS_FILENAME"
 
@@ -120,7 +120,7 @@ openssl pkcs12 -in "$1" -cacerts -nokeys -out "$CERT_CACERTS_CHAIN_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_CACERTS_CHAIN_FILENAME"
 
@@ -129,7 +129,7 @@ openssl pkcs12 -in "$1" -cacerts -nokeys | sed -ne '/-BEGIN CERTIFICATE-/,/-END 
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_CACERTS_CHAIN_WITHOUTBAGATTRIBUTES_FILENAME"
 
@@ -138,7 +138,7 @@ openssl pkcs12 -in "$1" -out "$CERT_ENC_PKEY_CERT_PEM_FILENAME" -clcerts
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_ENC_PKEY_CERT_PEM_FILENAME"
 
@@ -147,7 +147,7 @@ openssl pkcs12 -in "$1" -out "$CERT_NOE_PKEY_CERT_PEM_FILENAME" -clcerts -noenc
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_NOE_PKEY_CERT_PEM_FILENAME"
 
@@ -156,7 +156,7 @@ openssl pkcs12 -in "$1" -out "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME"
 
@@ -165,7 +165,7 @@ openssl pkcs12 -in "$1" -out "$CERT_NOE_PKEY_ALL_CERTS_PEM_FILENAME" -noenc
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_NOE_PKEY_ALL_CERTS_PEM_FILENAME"
 
@@ -174,10 +174,10 @@ openssl x509 -in "$CERT_ENC_PKEY_ALL_CERTS_PEM_FILENAME" -outform DER -out "$CER
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 chmod go-rwx "$CERT_ENC_PKEY_ALL_CERTS_DER_FILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

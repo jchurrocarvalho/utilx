@@ -35,5 +35,5 @@ DUMPFILENAME="$6".gz
 /usr/pgsql-"$PGSQLVERSION"/bin/pg_dump -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" -Fc "$DBNAME" | gzip > "$DUMPFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

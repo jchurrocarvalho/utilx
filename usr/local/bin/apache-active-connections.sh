@@ -27,5 +27,5 @@ else
     echo "No active connections found."
 fi
 
-exit $retvalue
+exit "$retvalue"
 

@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 BASEPATH="$2"
@@ -53,7 +53,7 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" ! -type l -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args1" '{}' \;
+#find -P "$BASEPATH" ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args1" '{}' \;
 
 #
 acl_args2=""
@@ -74,7 +74,7 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args2" '{}' \;
+#find -P "$BASEPATH" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args2" '{}' \;
 
 #
 acl_args3=""
@@ -95,7 +95,7 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" -type f -perm -u=rw ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args3" '{}' \;
+#find -P "$BASEPATH" -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args3" '{}' \;
 
 #
 acl_args4=""
@@ -116,14 +116,14 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-#find -P "$BASEPATH" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args4" '{}' \;
+#find -P "$BASEPATH" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args4" '{}' \;
 
 find -P "$BASEPATH" \
-    \( ! -type l -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args1" '{}' \; \) , \
-    \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args2" '{}' \; \) , \
-    \( -type f -perm -u=rw ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args3" '{}' \; \) , \
-    \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m "$acl_args4" '{}' \; \)
+    \( ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args1" '{}' \; \) , \
+    \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args2" '{}' \; \) , \
+    \( -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args3" '{}' \; \) , \
+    \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args4" '{}' \; \)
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

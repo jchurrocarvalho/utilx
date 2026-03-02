@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 #
@@ -46,16 +46,16 @@ for arg in "$@"; do
     if [ $i -ge 2 ]; then
         echo "=> Path: $arg"
 
-        #find -P "$arg" ! -type l -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rwx '{}' \;
-        #find -P "$arg" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rx '{}' \;
-        #find -P "$arg" -type f -perm -u=rw ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rw '{}' \;
-        #find -P "$arg" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":r '{}' \;
+        #find -P "$arg" ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rwx '{}' \;
+        #find -P "$arg" ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rx '{}' \;
+        #find -P "$arg" -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rw '{}' \;
+        #find -P "$arg" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":r '{}' \;
 
         find -P "$arg" \
-            \( ! -type l -perm -u=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rwx '{}' \; \) , \
-            \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rx '{}' \; \) , \
-            \( -type f -perm -u=rw ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":rw '{}' \; \) , \
-            \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":r '{}' \; \)
+            \( ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rwx '{}' \; \) , \
+            \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rx '{}' \; \) , \
+            \( -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rw '{}' \; \) , \
+            \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":r '{}' \; \)
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
@@ -65,5 +65,5 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-exit $retvalue
+exit "$retvalue"
 

@@ -16,5 +16,5 @@
 
 export GIT_ASKPASS=echo
 
-exit 0
+return 0
 

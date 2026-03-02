@@ -34,5 +34,5 @@ DUMPFILENAME="$5".gz
 pg_dump -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" -Fc "$DBNAME" --schema-only | gzip > "$DUMPFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

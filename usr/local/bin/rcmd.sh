@@ -50,5 +50,5 @@ echo ""
 ssh "$user@$host_to_command" sh -c "\"$command\""
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

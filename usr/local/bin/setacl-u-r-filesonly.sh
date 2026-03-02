@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 if [[ "$3" == *x* ]]; then
@@ -60,14 +60,14 @@ for arg in "$@"; do
         echo "=> Path: $arg"
 
         if [ "$XBIT" = "1" ]; then
-            #find -P "$arg" -type f -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS"x '{}' \;
-            #find -P "$arg" -type f ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \;
+            #find -P "$arg" -type f -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS"x '{}' \;
+            #find -P "$arg" -type f ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \;
 
             find -P "$arg" \
-                \( -type f -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS"x '{}' \; \) , \
-                \( -type f ! -perm /u=x -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \; \)
+                \( -type f -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS"x '{}' \; \) , \
+                \( -type f ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \; \)
         else
-            find -P "$arg" -type f -exec setfacl "$RECALCULATEMASKOPTION" -m u:"$USERID":"$PERMS" '{}' \;
+            find -P "$arg" -type f -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \;
         fi
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
@@ -78,5 +78,5 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-exit $retvalue
+exit "$retvalue"
 

@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 #
@@ -48,7 +48,7 @@ for arg in "$@"; do
     if [ $i -ge 3 ]; then
         echo "=> Path: $arg"
 
-        find -P "$arg" -type d -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":"$PERMS" '{}' \;
+        find -P "$arg" -type d -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":"$PERMS" '{}' \;
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
@@ -58,5 +58,5 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-exit $retvalue
+exit "$retvalue"
 

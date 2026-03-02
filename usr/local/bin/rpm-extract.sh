@@ -28,5 +28,5 @@ fi
 rpm2cpio "$1" | cpio -idmv
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

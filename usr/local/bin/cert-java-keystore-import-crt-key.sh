@@ -46,7 +46,7 @@ cert-create-pfx-from-crt-key.sh "$CERTFILENAME" "$KEYFILENAME" "$TMPPFXFILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 #cert-java-keystore-import-pfx.sh "$KEYSTOREFILENAME" "$STORETYPE" "$TMPPFXFILENAME" "$DESTKEYPASS" "$ALIAS" "$ALIAS"
@@ -54,11 +54,11 @@ cert-java-keystore-import-pfx2.sh "$KEYSTOREFILENAME" "$STORETYPE" "$TMPPFXFILEN
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 rm -f "$TMPPFXFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

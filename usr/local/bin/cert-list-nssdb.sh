@@ -28,5 +28,5 @@ fi
 certutil -L -d "$1"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

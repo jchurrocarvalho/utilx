@@ -28,5 +28,5 @@ fi
 rpm -Uvh --nodeps --force "$1"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

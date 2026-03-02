@@ -39,5 +39,5 @@ echo "Submiting self-signed request $CSRFILENAME"
 openssl x509 -req -days "$VALIDITY" -in "$CSRFILENAME" -signkey "$KEYFILENAME" -out "$CERTFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

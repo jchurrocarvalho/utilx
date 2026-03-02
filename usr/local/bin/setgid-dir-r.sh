@@ -27,5 +27,5 @@ fi
 find "$1" -type d -exec chmod g+s '{}' \;
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

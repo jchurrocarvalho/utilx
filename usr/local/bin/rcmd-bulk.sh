@@ -88,5 +88,5 @@ do
     fi
 done < "$INPUTFILENAME"
 
-exit $retvalueend
+exit "$retvalue"end
 

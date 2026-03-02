@@ -34,11 +34,11 @@ sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql "$DBNAME" -h "$SERVERNAME" 
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql "$DBNAME" -h "$SERVERNAME" -p "$PORT" -c 'analyze;'
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

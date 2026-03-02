@@ -34,5 +34,5 @@ fi
 keytool -importcert -alias "$ALIAS" -keystore "$KEYSTOREFILENAME" -storetype "$STORETYPE" -file "$CERTFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

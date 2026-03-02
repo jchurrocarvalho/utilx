@@ -17,7 +17,7 @@
 usage()
 {
     echo "git switch branch"
-    echo "Usage: git-switch-branch.sh <branch (master? main?)>"
+    echo "Usage: git-switch-branch.sh <branch (master? main? dev? ...?)>"
 }
 
 if [ "$1" = "" ]; then
@@ -30,5 +30,5 @@ BRANCH="$1"
 git switch "$BRANCH"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

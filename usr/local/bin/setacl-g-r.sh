@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="-n"
+    RECALCULATEMASKOPTION="n"
 fi
 
 #
@@ -46,18 +46,18 @@ for arg in "$@"; do
     if [ $i -ge 2 ]; then
         echo "=> Path: $arg"
 
-        #find -P "$arg" ! -type l -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rwx '{}' \;
-        #find -P "$arg" ! -type l -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rx '{}' \;
-        #find -P "$arg" -type f -perm -g=rw ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rw '{}' \;
-        #find -P "$arg" -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":r '{}' \;
-        #find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":000 '{}' \;
+        #find -P "$arg" ! -type l -perm -g=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rwx '{}' \;
+        #find -P "$arg" ! -type l -perm -g=rx ! -perm /g=w -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rx '{}' \;
+        #find -P "$arg" -type f -perm -g=rw ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rw '{}' \;
+        #find -P "$arg" -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":r '{}' \;
+        #find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":000 '{}' \;
 
         find -P "$arg" \
-            \( ! -type l -perm -g=rwx -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rwx '{}' \; \) , \
-            \( ! -type l -perm -g=rx ! -perm /g=w -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rx '{}' \; \) , \
-            \( -type f -perm -g=rw ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":rw '{}' \; \) , \
-            \( -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":r '{}' \; \) , \
-            \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl "$RECALCULATEMASKOPTION" -m g:"$GROUPID":000 '{}' \; \)
+            \( ! -type l -perm -g=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rwx '{}' \; \) , \
+            \( ! -type l -perm -g=rx ! -perm /g=w -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rx '{}' \; \) , \
+            \( -type f -perm -g=rw ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rw '{}' \; \) , \
+            \( -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":r '{}' \; \) , \
+            \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":000 '{}' \; \)
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
@@ -67,5 +67,5 @@ for arg in "$@"; do
     i=$((i+1))
 done
 
-exit $retvalue
+exit "$retvalue"
 

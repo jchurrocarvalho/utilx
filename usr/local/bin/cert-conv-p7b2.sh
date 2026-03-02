@@ -37,7 +37,7 @@ openssl pkey -in "$1" -out "$PKEY_PEM_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 echo "Exporting all certificates to $CERT_ALL_CERTS_PEM_FILENAME in pem format"
@@ -45,7 +45,7 @@ openssl pkcs7 -print_certs -in "$1" -out "$CERT_ALL_CERTS_PEM_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 echo "Exporting all certificates to $CERT_ALL_CERTS_DER_FILENAME in der format"
@@ -53,7 +53,7 @@ openssl pkcs7 -print_certs -in "$1" -outform DER -out "$CERT_ALL_CERTS_DER_FILEN
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 echo "Exporting x509 in DER format to $CERT_X509_DER_FILENAME"
@@ -61,9 +61,9 @@ openssl x509 -in "$1" -outform DER -out "$CERT_X509_DER_FILENAME"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

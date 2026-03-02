@@ -33,7 +33,7 @@ dbnames=$(sudo -u postgres /usr/pgsql-"$PGSQLVERSION"/bin/psql postgres -t -h "$
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 for dbname in $dbnames; do

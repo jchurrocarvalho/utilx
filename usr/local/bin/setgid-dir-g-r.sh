@@ -28,5 +28,5 @@ find "$2" -type d -exec chmod g+s '{}' \;
 find "$2" -exec chgrp "$1" '{}' \;
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

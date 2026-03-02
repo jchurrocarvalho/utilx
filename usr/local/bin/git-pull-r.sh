@@ -14,9 +14,34 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+usage()
+{
+    echo "git pull recursive"
+    echo "Usage: git-pull-r.sh <git pull options (optional)>"
+}
+
+usage
+
+#
+
+git_pull_options=""
+i=0
+
+for arg in "$@"; do
+    if [ "$git_pull_options" != "" ]; then
+        git_pull_options+=" "
+    fi
+    git_pull_options+="$arg"
+    i=$((i+1))
+done
+
 #find -mindepth 1 -maxdepth 1 -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
-find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
+if [ "$git_pull_options" != "" ]; then
+    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' $git_pull_options \;
+else
+    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
+fi
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

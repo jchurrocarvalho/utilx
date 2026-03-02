@@ -34,5 +34,5 @@ fi
 keytool -certreq -alias "$ALIAS" -keystore "$KEYSTOREPATHFILENAME" -storetype "$STORETYPE" -file "$CERTREQFILENAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

@@ -46,8 +46,7 @@ echo ""
 
 #$command &
 $command >/dev/null 2>/dev/null &
-
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 

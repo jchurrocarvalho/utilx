@@ -44,7 +44,7 @@ sudo -u postgres psql postgres -p "$PORT" -c "drop database if exists $DBNAME;"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 if [ "$CREATEROLE" = "1" ]; then
@@ -52,7 +52,7 @@ if [ "$CREATEROLE" = "1" ]; then
     retvalue=$?
     if [ "$retvalue" != "0" ]; then
         echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-        exit $retvalue
+        exit "$retvalue"
     fi
 fi
 
@@ -60,18 +60,18 @@ sudo -u postgres psql postgres -p "$PORT" -c "create database $DBNAME with templ
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 sudo -u postgres psql postgres -p "$PORT" -c "grant all on database $DBNAME to $DBUSERNAME;"
 retvalue=$?
 if [ "$retvalue" != "0" ]; then
     echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
-    exit $retvalue
+    exit "$retvalue"
 fi
 
 gunzip -c "$DUMPFILENAME" | pg_restore -U "$DBUSERNAME" -h "$SERVERNAME" -p "$PORT" --clean --no-privileges --no-owner -d "$DBNAME"
 retvalue=$?
 
-exit $retvalue
+exit "$retvalue"
 
