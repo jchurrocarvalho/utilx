@@ -18,7 +18,7 @@ usage()
 {
     echo "set recursive acl user according to owner user perms (several users)"
     echo "if user/group is EMPTY or 0, the acl is set for no named user/group"
-    echo "Usage: setacls-u-r.sh <recalculate mask? (0/1)> <path> <user> ..."
+    echo "Usage: setacls-u-r.sh <recalculate mask? [0|1]> <path> <user> ..."
 }
 
 if [ "$3" = "" ]; then
@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 BASEPATH="$2"
@@ -118,11 +118,12 @@ done
 
 #find -P "$BASEPATH" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args4" '{}' \;
 
-find -P "$BASEPATH" \
-    \( ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args1" '{}' \; \) , \
-    \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args2" '{}' \; \) , \
-    \( -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args3" '{}' \; \) , \
-    \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m "$acl_args4" '{}' \; \)
+CMDEXE="find -P $BASEPATH \
+    \( ! -type l -perm -u=rwx -exec setfacl $RECALCULATEMASKOPTION -m $acl_args1 '{}' \; \) , \
+    \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl $RECALCULATEMASKOPTION -m $acl_args2 '{}' \; \) , \
+    \( -type f -perm -u=rw ! -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m $acl_args3 '{}' \; \) , \
+    \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m $acl_args4 '{}' \; \)"
+eval "$CMDEXE"
 retvalue=$?
 
 exit "$retvalue"

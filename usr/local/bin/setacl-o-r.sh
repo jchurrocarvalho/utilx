@@ -17,7 +17,7 @@
 usage()
 {
     echo "set recursive acl group according to base group perms (several paths)"
-    echo "Usage: setacl-o-r.sh <recalculate mask? (0/1)> <path> ..."
+    echo "Usage: setacl-o-r.sh <recalculate mask? [0|1]> <path> ..."
 }
 
 if [ "$2" = "" ]; then
@@ -28,7 +28,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -46,12 +46,13 @@ for arg in "$@"; do
         #find -P "$arg" -type f -perm -o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"m o::r '{}' \;
         #find -P "$arg" -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"m o::000 '{}' \;
 
-        find -P "$arg" \
-            \( ! -type l -perm -o=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m o::rwx '{}' \; \) , \
-            \( ! -type l -perm -o=rx ! -perm /o=w -exec setfacl -"$RECALCULATEMASKOPTION"m o::rx '{}' \; \) , \
-            \( -type f -perm -o=rw ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"m o::rw '{}' \; \) , \
-            \( -type f -perm -o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"m o::r '{}' \; \) , \
-            \( -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"m o::000 '{}' \; \)
+        CMDEXE="find -P $arg \
+            \( ! -type l -perm -o=rwx -exec setfacl $RECALCULATEMASKOPTION -m o::rwx '{}' \; \) , \
+            \( ! -type l -perm -o=rx ! -perm /o=w -exec setfacl $RECALCULATEMASKOPTION -m o::rx '{}' \; \) , \
+            \( -type f -perm -o=rw ! -perm /o=x -exec setfacl $RECALCULATEMASKOPTION -m o::rw '{}' \; \) , \
+            \( -type f -perm -o=r ! -perm /o=w ! -perm /o=x -exec setfacl $RECALCULATEMASKOPTION -m o::r '{}' \; \) , \
+            \( -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl $RECALCULATEMASKOPTION -m o::000 '{}' \; \)"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

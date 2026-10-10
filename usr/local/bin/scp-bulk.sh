@@ -72,26 +72,18 @@ do
                 echo "================================================================"
                 echo "host: $targethostname:$port"
                 echo "================================================================"
-                #scp "$4" "$user@$targethostname:$3"
-                #scp -r "$files_args" "$user@$targethostname:$3"
-                i=0
-                for arg in "$@"
-                do
-                    if [ $i -ge 3 ]; then
-                        scp -P "$port" "$arg" "$user@$targethostname:$3"
-                        retvalue=$?
-                        if [ "$retvalue" != "0" ]; then
-                            echo "An error was returned. {User: $user, Host: $targethostname, Port: $port}, {Line: $LINENO, Error Code: $retvalue}"
-                            retvalueend=$retvalue
-                        fi
-                    fi
-                    i=$((i+1))
-                done
+                scp -P "$port" $files_args "$user@$targethostname:$3"
+                retvalue=$?
+                if [ "$retvalue" != "0" ]; then
+                    echo "An error was returned. {User: $user, Host: $targethostname, Port: $port}, {Line: $LINENO, Error Code: $retvalue}"
+                    retvalueend=$retvalue
+                fi
+
                 echo ""
             fi
         fi
     fi
 done < "$INPUTFILENAME"
 
-exit "$retvalue"end
+exit "$retvalueend"
 

@@ -18,7 +18,7 @@ usage()
 {
     echo "set recursive acl group according to base group perms (several paths)"
     echo "if user/group is EMPTY or 0, the acl is set for no named user/group"
-    echo "Usage: setacl-g-r.sh <recalculate mask? (0/1)> <group> <path> ..."
+    echo "Usage: setacl-g-r.sh <recalculate mask? [0|1]> <group> <path> ..."
 }
 
 if [ "$3" = "" ]; then
@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -52,12 +52,13 @@ for arg in "$@"; do
         #find -P "$arg" -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":r '{}' \;
         #find -P "$arg" -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":000 '{}' \;
 
-        find -P "$arg" \
-            \( ! -type l -perm -g=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rwx '{}' \; \) , \
-            \( ! -type l -perm -g=rx ! -perm /g=w -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rx '{}' \; \) , \
-            \( -type f -perm -g=rw ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":rw '{}' \; \) , \
-            \( -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":r '{}' \; \) , \
-            \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":000 '{}' \; \)
+        CMDEXE="find -P $arg \
+            \( ! -type l -perm -g=rwx -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:rwx '{}' \; \) , \
+            \( ! -type l -perm -g=rx ! -perm /g=w -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:rx '{}' \; \) , \
+            \( -type f -perm -g=rw ! -perm /g=x -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:rw '{}' \; \) , \
+            \( -type f -perm -g=r ! -perm /g=w ! -perm /g=x -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:r '{}' \; \) , \
+            \( -type d ! -perm /g=r ! -perm /g=w ! -perm /g=x -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:000 '{}' \; \)"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

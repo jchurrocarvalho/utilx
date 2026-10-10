@@ -20,7 +20,7 @@ usage()
     echo "Usage: git-switch-branch.sh <branch (master? main? dev? ...?)>"
 }
 
-if [ "$1" = "" ]; then
+if [ -z "${1:-}" ]; then
     usage
     exit 2
 fi

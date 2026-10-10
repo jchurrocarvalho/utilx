@@ -18,7 +18,7 @@ usage()
 {
     echo "set recursive acl group and perms applying only to dirs (several paths)"
     echo "if user/group is EMPTY or 0, the acl is set for no named user/group"
-    echo "Usage: setacl-g-r-dirsonly.sh <recalculate mask? (0/1)> <group> <perms> <path> ..."
+    echo "Usage: setacl-g-r-dirsonly.sh <recalculate mask? [0|1]> <group> <perms> <path> ..."
 }
 
 if [ "$4" = "" ]; then
@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -48,7 +48,8 @@ for arg in "$@"; do
     if [ $i -ge 3 ]; then
         echo "=> Path: $arg"
 
-        find -P "$arg" -type d -exec setfacl -"$RECALCULATEMASKOPTION"m g:"$GROUPID":"$PERMS" '{}' \;
+        CMDEXE="find -P $arg -type d -exec setfacl $RECALCULATEMASKOPTION -m g:$GROUPID:$PERMS '{}' \;"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

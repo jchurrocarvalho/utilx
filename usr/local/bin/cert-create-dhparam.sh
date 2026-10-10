@@ -17,7 +17,7 @@
 usage()
 {
     echo "Cert create dhparam"
-    echo "Usage: cert-create-dhparam.sh <filename> <keysize (2048 / 4096)>"
+    echo "Usage: cert-create-dhparam.sh <filename> <keysize [2048|4096]>"
 }
 
 if [ "$2" = "" ]; then

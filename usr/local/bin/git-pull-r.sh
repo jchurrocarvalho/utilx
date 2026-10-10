@@ -2,7 +2,7 @@
 
 #
 # Released under MIT License
-# Copyright (c) 2018-2025 Jose Manuel Churro Carvalho
+# Copyright (c) 2018-2026 Jose Manuel Churro Carvalho
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 # and associated documentation files (the "Software"), to deal in the Software without restriction, 
 # including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -17,29 +17,34 @@
 usage()
 {
     echo "git pull recursive"
-    echo "Usage: git-pull-r.sh <git pull options (optional)>"
+    echo "Usage: git-pull-r.sh <bypass test for .git-operation-ignore [0|1]> <git pull options (optional)>"
 }
 
-usage
+if [ -z "${1:-}" ]; then
+    usage
+    exit 2
+fi
 
-#
+BYPASS_TEST_OPERATION_IGNORE="$1"
 
 git_pull_options=""
 i=0
 
 for arg in "$@"; do
-    if [ "$git_pull_options" != "" ]; then
-        git_pull_options+=" "
+    if [ $i -ge 1 ]; then
+        if [ "$git_pull_options" != "" ]; then
+            git_pull_options+=" "
+        fi
+        git_pull_options+="$arg"
     fi
-    git_pull_options+="$arg"
     i=$((i+1))
 done
 
 #find -mindepth 1 -maxdepth 1 -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
 if [ "$git_pull_options" != "" ]; then
-    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' $git_pull_options \;
+    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh "$BYPASS_TEST_OPERATION_IGNORE" '{}' $git_pull_options \;
 else
-    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh '{}' \;
+    find . -type d \( -exec test -d '{}/.git' \; \) -exec git-pull-p.sh "$BYPASS_TEST_OPERATION_IGNORE" '{}' \;
 fi
 retvalue=$?
 

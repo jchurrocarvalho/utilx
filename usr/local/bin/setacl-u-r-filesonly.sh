@@ -18,7 +18,7 @@ usage()
 {
     echo "set recursive acl user and perms applying only to files (several paths)"
     echo "if user/group is EMPTY or 0, the acl is set for no named user/group"
-    echo "Usage: setacl-u-r-filesonly.sh <recalculate mask? (0/1)> <user> <perms> <include x bit if owner user has x bit ()0/1)> <path> ..."
+    echo "Usage: setacl-u-r-filesonly.sh <recalculate mask? [0|1]> <user> <perms> <include x bit if owner user has x bit [0|1]> <path> ..."
 }
 
 if [ "$5" = "" ]; then
@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 if [[ "$3" == *x* ]]; then
@@ -63,12 +63,13 @@ for arg in "$@"; do
             #find -P "$arg" -type f -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS"x '{}' \;
             #find -P "$arg" -type f ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \;
 
-            find -P "$arg" \
-                \( -type f -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS"x '{}' \; \) , \
-                \( -type f ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \; \)
+            CMDEXE="find -P $arg \
+                \( -type f -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:${PERMS}x '{}' \; \) , \
+                \( -type f ! -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:$PERMS '{}' \; \)"
         else
-            find -P "$arg" -type f -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":"$PERMS" '{}' \;
+            CMDEXE="find -P $arg -type f -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:$PERMS '{}' \;"
         fi
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

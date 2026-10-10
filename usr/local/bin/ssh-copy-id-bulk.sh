@@ -17,10 +17,10 @@
 usage()
 {
     echo "ssh-copy-id to list machines"
-    echo "Usage: ssh-copy-id-bulk.sh <user> <file list>"
+    echo "Usage: ssh-copy-id-bulk.sh <user> <ssh cert file> <file list>"
 }
 
-if [ "$2" = "" ]; then
+if [ -z "${3:-}" ]; then
     usage
     exit 2
 fi
@@ -28,12 +28,13 @@ fi
 hostname=$(eval 'hostname')
 
 user="$1"
+ssh_cert_filename="$2"
 targethostname=""
 port=""
 
 i=0
 
-INPUTFILENAME="$2"
+INPUTFILENAME="$3"
 
 #for line in $(cat "$INPUTFILENAME"); do
 while IFS= read -r line
@@ -57,7 +58,7 @@ do
                 echo "================================================================"
                 echo "host: $targethostname:$port"
                 echo "================================================================"
-                ssh-copy-id -p "$port" -i ~/.ssh/id_rsa.pub "$user@$targethostname"
+                ssh-copy-id -p "$port" -i "$ssh_cert_filename" "$user@$targethostname"
                 echo ""
             fi
         fi

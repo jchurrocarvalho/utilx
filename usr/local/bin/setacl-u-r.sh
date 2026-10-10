@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -51,11 +51,12 @@ for arg in "$@"; do
         #find -P "$arg" -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rw '{}' \;
         #find -P "$arg" -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":r '{}' \;
 
-        find -P "$arg" \
-            \( ! -type l -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rwx '{}' \; \) , \
-            \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rx '{}' \; \) , \
-            \( -type f -perm -u=rw ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":rw '{}' \; \) , \
-            \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl -"$RECALCULATEMASKOPTION"m u:"$USERID":r '{}' \; \)
+        CMDEXE="find -P $arg \
+            \( ! -type l -perm -u=rwx -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:rwx '{}' \; \) , \
+            \( ! -type l -perm -u=rx ! -perm /u=w -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:rx '{}' \; \) , \
+            \( -type f -perm -u=rw ! -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:rw '{}' \; \) , \
+            \( -type f -perm -u=r ! -perm /u=w ! -perm /u=x -exec setfacl $RECALCULATEMASKOPTION -m u:$USERID:r '{}' \; \)"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"
@@ -66,4 +67,3 @@ for arg in "$@"; do
 done
 
 exit "$retvalue"
-

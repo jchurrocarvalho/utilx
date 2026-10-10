@@ -18,7 +18,7 @@ usage()
 {
     echo "set recursive default acl user according to owner user perms (several paths)"
     echo "if user/group is EMPTY or 0, the acl is set for no named user/group"
-    echo "Usage: setacl-def-u-r.sh <recalculate mask? (0/1)> <user> <path> ..."
+    echo "Usage: setacl-def-u-r.sh <recalculate mask? [0|1]> <user> <path> ..."
 }
 
 if [ "$3" = "" ]; then
@@ -29,7 +29,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -49,9 +49,10 @@ for arg in "$@"; do
         #find -P "$arg" -type d -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"dm u:"$USERID":rwX '{}' \;
         #find -P "$arg" -type d -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"dm u:"$USERID":rX '{}' \;
 
-        find -P "$arg" \
-            \( -type d -perm -u=rwx -exec setfacl -"$RECALCULATEMASKOPTION"dm u:"$USERID":rwX '{}' \; \) , \
-            \( -type d -perm -u=rx ! -perm /u=w -exec setfacl -"$RECALCULATEMASKOPTION"dm u:"$USERID":rX '{}' \; \)
+        CMDEXE="find -P $arg \
+            \( -type d -perm -u=rwx -exec setfacl $RECALCULATEMASKOPTION -dm u:$USERID:rwX '{}' \; \) , \
+            \( -type d -perm -u=rx ! -perm /u=w -exec setfacl $RECALCULATEMASKOPTION -dm u:$USERID:rX '{}' \; \)"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

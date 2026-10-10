@@ -24,7 +24,7 @@ usage()
     echo "dname example:"
     echo "    -dname \"CN=[Common Name], OU=[organisationunit], O=[organisation], L=[town/city], ST=[state/province], C=[GB]\""
     #echo "Usage: cert-java-keystore-create-import-crt-key.sh <keystore path> <certificate filename> <key filename> <dest keypass> <dname (optional)>"
-    echo "Usage: cert-java-keystore-create-import-crt-key-rsa.sh <keystore path> <certificate filename> <key filename> <keysize (2048/4096)> <dname (optional)>"
+    echo "Usage: cert-java-keystore-create-import-crt-key-rsa.sh <keystore path> <certificate filename> <key filename> <keysize [2048|4096]> <dname (optional)>"
 }
 
 #

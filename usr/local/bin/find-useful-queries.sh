@@ -20,7 +20,7 @@ usage()
 {
     echo "several find useful queries"
     echo "Queries like strange perms such as group write but user without write perm ... and so on ..."
-    echo "Usage: $SCRIPTTITLE.sh <include read bit in others perms? (0/1)> <path> ..."
+    echo "Usage: $SCRIPTTITLE.sh <include read bit in others perms? [0|1]> <path> ..."
 }
 
 if [ "$2" = "" ]; then

@@ -2,7 +2,7 @@
 
 #
 # Released under MIT License
-# Copyright (c) 2018-2025 Jose Manuel Churro Carvalho
+# Copyright (c) 2018-2026 Jose Manuel Churro Carvalho
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 # and associated documentation files (the "Software"), to deal in the Software without restriction, 
 # including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
@@ -17,10 +17,10 @@
 usage()
 {
     echo "git pull with path"
-    echo "Usage: git-pull-p.sh <path> <git pull options (optional)>"
+    echo "Usage: git-pull-p.sh <bypass test for .git-operation-ignore [0|1]> <path> <git pull options (optional)>"
 }
 
-if [ "$1" = "" ]; then
+if [ -z "${2:-}" ]; then
     usage
     exit 2
 fi
@@ -29,35 +29,46 @@ fi
 #exec 1>&1
 #exec 2>&1
 
-GIT_REPO_PATH="$1"
+BYPASS_TEST_OPERATION_IGNORE="$1"
+GIT_REPO_PATH="$2"
 
-#
+retvalue=0
 
-git_pull_options=""
-i=0
+function cmd_exec()
+{
+    git_pull_options=""
+    i=0
 
-for arg in "$@"; do
-    if [ $i -ge 1 ]; then
-        if [ "$git_pull_options" != "" ]; then
-            git_pull_options+=" "
+    for arg in "$@"; do
+        if [ $i -ge 2 ]; then
+            if [ "$git_pull_options" != "" ]; then
+                git_pull_options+=" "
+            fi
+            git_pull_options+="$arg"
         fi
-        git_pull_options+="$arg"
+        i=$((i+1))
+    done
+
+    echo "-> git pull in $GIT_REPO_PATH with options = [$git_pull_options]"
+    if [ "$git_pull_options" != "" ]; then
+        git pull $git_pull_options
+    else
+        git pull
     fi
-    i=$((i+1))
-done
+}
 
 workdir=$(eval 'pwd')
 
-echo "-> git pull in $GIT_REPO_PATH with options = [$git_pull_options]"
-
 cd "$GIT_REPO_PATH" || exit 1
-if [ "$git_pull_options" != "" ]; then
-    git pull $git_pull_options
-else
-    git pull
+
+if [ "$BYPASS_TEST_OPERATION_IGNORE" = "1" ]; then
+    cmd_exec
+elif [ ! -f ".git-operation-ignore" ] && [ ! -f "../.git-operation-ignore" ]; then
+    cmd_exec
 fi
+retvalue=$?
 
 cd "$workdir" || exit 1
 
-exit 0
+exit "$retvalue"
 

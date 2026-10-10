@@ -11,13 +11,13 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
 # INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
 # IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM[0|1], OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
 usage()
 {
     echo "set recursive default acl group according to base group perms (several paths)"
-	echo "Usage: setacl-def-o-r.sh <recalculate mask? (0/1)> <path> ..."
+	echo "Usage: setacl-def-o-r.sh <recalculate mask? [0|1]> <path> ..."
 }
 
 if [ "$2" = "" ]; then
@@ -28,7 +28,7 @@ fi
 if [ "$1" = "1" ]; then
     RECALCULATEMASKOPTION=""
 else
-    RECALCULATEMASKOPTION="n"
+    RECALCULATEMASKOPTION="-n"
 fi
 
 #
@@ -44,10 +44,11 @@ for arg in "$@"; do
         #find -P "$arg" -type d -perm -o=rx ! -perm /o=w -exec setfacl -"$RECALCULATEMASKOPTION"dm o::rX '{}' \;
         #find -P "$arg" -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"dm o::000 '{}' \;
 
-        find -P "$arg" \
-            \( -type d -perm -o=rwx -exec setfacl -"$RECALCULATEMASKOPTION"dm o::rwX '{}' \; \) , \
-            \( -type d -perm -o=rx ! -perm /o=w -exec setfacl -"$RECALCULATEMASKOPTION"dm o::rX '{}' \; \) , \
-            \( -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl -"$RECALCULATEMASKOPTION"dm o::000 '{}' \; \)
+        CMDEXE="find -P $arg \
+            \( -type d -perm -o=rwx -exec setfacl $RECALCULATEMASKOPTION -dm o::rwX '{}' \; \) , \
+            \( -type d -perm -o=rx ! -perm /o=w -exec setfacl $RECALCULATEMASKOPTION -dm o::rX '{}' \; \) , \
+            \( -type d ! -perm /o=r ! -perm /o=w ! -perm /o=x -exec setfacl $RECALCULATEMASKOPTION -dm o::000 '{}' \; \)"
+        eval "$CMDEXE"
         retvalue=$?
         if [ "$retvalue" != "0" ]; then
             echo "An error was returned. {Line: $LINENO, Error Code: $retvalue}"

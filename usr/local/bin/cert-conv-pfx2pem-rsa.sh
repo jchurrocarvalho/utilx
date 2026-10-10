@@ -20,7 +20,7 @@ usage()
 {
     echo "cert/key convert from pfx 2 pem (use rsa for key)"
     echo "Usage: cert-conv-pfx2pem-rsa.sh <pfx filename> <pem no encrypted private key filename> <client cert filename> <certs filename>"
-    echo "                            <ca certs filename> <rsa no passphrase key filename> <encrypted private key filename and all certs>"
+    echo "           <ca certs filename> <rsa no passphrase key filename> <encrypted private key filename and all certs>"
 }
 
 if [ "$7" = "" ]; then

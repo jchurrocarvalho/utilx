@@ -17,7 +17,7 @@
 usage()
 {
     echo "Cert create self-signed request with key (use rsa for key)"
-    echo "Usage: cert-create-crt-self-request-rsa.sh <certificate file title> <keysize (2048/4096)>"
+    echo "Usage: cert-create-crt-self-request-rsa.sh <certificate file title> <keysize [2048|4096]>"
 }
 
 if [ "$2" = "" ]; then
